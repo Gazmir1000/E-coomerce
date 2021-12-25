@@ -1,0 +1,6 @@
+@media only screen and (max-width: 600px) {
+  .appDiv {
+    overflow-x: auto;
+    width: 100%;
+  }
+}

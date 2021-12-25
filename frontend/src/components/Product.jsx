@@ -23,9 +23,10 @@ const Info = styled.div`
 const Container = styled.div`
   flex: 1;
   margin: 4px;
-  min-width: 280px;
+  min-width: 350px;
   height: 350px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   background-color: #f1fffb;
@@ -43,7 +44,7 @@ const Circle = styled.div`
   position: absolute;
 `;
 const Image = styled.img`
-  height: 75%;
+  height: 100%;
   z-index: 2;
 `;
 
