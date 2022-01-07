@@ -7,20 +7,29 @@ import Cart from "./pages/Cart";
 import Pay from "./pages/Pay";
 import Success from "./pages/Success";
 
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  BrowserRouter as Router,
+  Navigate,
+} from "react-router-dom";
 
 import "./app.css";
 
 const App = () => {
+  const user = true;
+  const navigate = () => {
+    return <Navigate to="/" />;
+  };
   return (
     <div className="appDiv">
       <Router>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/productlist" element={<ProductList />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/productlist/:category" element={<ProductList />} />
+          <Route path="/product/:id" element={<Product />} />
+          <Route path="/register">{user ? navigate : <Register />}</Route>
+          <Route path="/login">{user ? navigate : <Login />}</Route>
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Pay />} />
           <Route path="/success" element={<Success />} />

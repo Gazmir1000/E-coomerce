@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Announcements from "../components/Announcements";
 import Footer from "../components/Footer";
@@ -35,6 +37,19 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const ProductList = () => {
+  const location = useLocation();
+  const categoryName = location.pathname.split("/")[2];
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState("Me te rejat");
+
+  const handleFilters = (e) => {
+    const value = e.target.value;
+    setFilters({
+      ...filters,
+      [e.target.name]: value,
+    });
+  };
+
   return (
     <Container>
       <Navbar />
@@ -43,20 +58,16 @@ const ProductList = () => {
       <FilterContainer>
         <Filter>
           <FilterText>Filter Products:</FilterText>
-          <Select>
-            <Option disabled selected>
-              Ngjyra
-            </Option>
-            <Option>White</Option>
-            <Option>Black</Option>
-            <Option>Red</Option>
-            <Option>Blue</Option>
-            <Option>Green</Option>
+          <Select name="color" onChange={handleFilters}>
+            <Option disabled>Ngjyra</Option>
+            <Option>white</Option>
+            <Option>black</Option>
+            <Option>red</Option>
+            <Option>blue</Option>
+            <Option>green</Option>
           </Select>
-          <Select>
-            <Option disabled selected>
-              Madhesia
-            </Option>
+          <Select name="size" onChange={handleFilters}>
+            <Option disabled>Madhesia</Option>
             <Option>S (small)</Option>
             <Option>M (medium)</Option>
             <Option>L (large)</Option>
@@ -66,14 +77,14 @@ const ProductList = () => {
         </Filter>
         <Filter>
           <FilterText>Sort Products:</FilterText>
-          <Select>
-            <Option>Me te rejat</Option>
-            <Option>Me te shtrenjtat</Option>
-            <Option>Me te lirat</Option>
+          <Select onChange={(e) => setSort(e.target.value)}>
+            <Option value="newest">Me te rejat</Option>
+            <Option value="Me te shtrenjtat">Me te shtrenjtat</Option>
+            <Option value="Me te lirat">Me te lirat</Option>
           </Select>
         </Filter>
       </FilterContainer>
-      <Products />
+      <Products categoryName={categoryName} filters={filters} sort={sort} />
       <NewsLetter />
       <Footer />
     </Container>
