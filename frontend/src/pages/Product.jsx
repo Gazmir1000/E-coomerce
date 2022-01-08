@@ -1,10 +1,16 @@
 import { Add, Remove } from "@material-ui/icons";
+
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Announcements from "../components/Announcements";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import NewsLetter from "../components/NewsLetter";
 import { mobile } from "../responsive";
+import { publicRequest } from "../axiosRequest";
+import { addProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -101,48 +107,78 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const location = useLocation();
+  const productId = location.pathname.split("/")[2];
+  const [product, setProduct] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await publicRequest.get("/products/find/" + productId);
+        setProduct(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getProduct();
+  }, [productId]);
+
+  const handleClick = () => {
+    dispatch(addProduct({ ...product, quantity, color, size }));
+  };
+
   return (
     <Container>
       <Navbar />
       <Announcements />
       <Wrapper>
         <ImageContainer>
-          <Image src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=715&q=80" />
+          <Image src={product.img} />
         </ImageContainer>
         <InfoContainer>
-          <Title> Bluze </Title>
-          <Description>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus
-            non deserunt, modi sint, eligendi nam, inventore enim tempore
-            exercitationem nemo veritatis ducimus? Voluptatem dolor animi sequi
-            culpa eius perferendis ab?
-          </Description>
-          <Price>20 Euro</Price>
+          <Title> {product.title} </Title>
+          <Description>{product.desc}</Description>
+          <Price>$ {product.price}</Price>
           <FilterContainer>
             <Filter>
               <FilterTitle>Ngjyra:</FilterTitle>
-              <FilterColor color="red" />
-              <FilterColor color="black" />
-              <FilterColor color="gray" />
+              {product.color?.map((c) => {
+                return (
+                  <FilterColor color={c} key={c} onClick={() => setColor(c)} />
+                );
+              })}
             </Filter>
             <Filter>
               <FilterTitle>Madhesia</FilterTitle>
               <FilterSize>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>XL</FilterSizeOption>
-                <FilterSizeOption>XXL</FilterSizeOption>
+                {product.size?.map((s) => {
+                  return (
+                    <FilterSizeOption
+                      key={s}
+                      onChange={(e) => setSize(e.target.value)}
+                    >
+                      {s}
+                    </FilterSizeOption>
+                  );
+                })}
               </FilterSize>
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
+              <Remove
+                onClick={() => {
+                  if (quantity > 1) setQuantity(quantity - 1);
+                }}
+              />
+              <Amount>{quantity}</Amount>
+              <Add onClick={() => setQuantity(quantity + 1)} />
             </AmountContainer>
-            <Button>Shto ne shporte</Button>
+            <Button onClick={handleClick}>Shto ne shporte</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

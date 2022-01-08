@@ -32,19 +32,19 @@ export const categories = [
     id: 1,
     img: "https://images.unsplash.com/photo-1622567893612-a5345baa5c9a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80",
     title: "Hoodies",
-    name: "women",
+    name: "Hoodies",
   },
   {
     id: 2,
     img: "https://images.unsplash.com/photo-1572307480813-ceb0e59d8325?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=735&q=80",
     title: "Hats",
-    name: "man",
+    name: "Hats",
   },
   {
     id: 3,
     img: "https://images.unsplash.com/photo-1593795899768-947c4929449d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=872&q=80",
     title: "Jeans",
-    name: "hats",
+    name: "Jeans",
   },
 ];
 

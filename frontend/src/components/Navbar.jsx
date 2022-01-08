@@ -4,6 +4,7 @@ import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import { Badge } from "@material-ui/core";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Containor = styled.div`
   height: 60px;
@@ -75,6 +76,8 @@ const MenuItems = styled.div`
 `;
 
 const Navbar = () => {
+  const quantity = useSelector((state) => state.cart.quantity);
+
   return (
     <Containor>
       <Wraper>
@@ -102,9 +105,9 @@ const Navbar = () => {
             <MenuItems>SignIn</MenuItems>
           </Link>
 
-          <Link to="cart">
+          <Link to="/cart">
             <MenuItems>
-              <Badge badgeContent={4} color="primary">
+              <Badge badgeContent={quantity} color="primary">
                 <ShoppingCartOutlined color="action" />
               </Badge>
             </MenuItems>

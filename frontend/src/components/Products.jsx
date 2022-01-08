@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import { products } from "../data";
+
 import Product from "./Product";
 
 const Container = styled.div`
@@ -42,13 +42,28 @@ const Products = ({ categoryName, filters, sort }) => {
       );
   }, [categoryName, filters, products]);
 
-  useEffect(() => {}, [sort]);
+  useEffect(() => {
+    if (sort === "Me te rejat")
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.createdAt - b.createdAt)
+      );
+    else if (sort === "Me te lirat")
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => a.price - b.price)
+      );
+    else
+      setFilteredProducts((prev) =>
+        [...prev].sort((a, b) => b.price - a.price)
+      );
+  }, [sort]);
 
   return (
     <Container>
-      {filteredProducts.map((item) => (
-        <Product item={item} key={item.id} />
-      ))}
+      {categoryName
+        ? filteredProducts.map((item) => <Product item={item} key={item.id} />)
+        : products
+            .slice(0, 8)
+            .map((item) => <Product item={item} key={item.id} />)}
     </Container>
   );
 };

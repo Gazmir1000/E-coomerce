@@ -4,6 +4,7 @@ import Announcements from "../components/Announcements";
 import Footer from "../components/Footer";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -134,6 +135,7 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
   return (
     <Container>
       <Navbar />
@@ -150,65 +152,44 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetail>
-                <Image src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=715&q=80" />
-                <Details>
-                  <ProductName>
-                    <b>Prdukti: </b>fdgs
-                  </ProductName>
-                  <ProductId>
-                    <b>ID: </b>545
-                  </ProductId>
-                  <ProductColor />
-                  <ProductSize>
-                    <b>Madhesia: </b>S
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountConteiner>
-                  <Add />
-                  <ProductAmount>3</ProductAmount>
-                  <Remove />
-                </ProductAmountConteiner>
-                <ProductPrice>30.000Leke</ProductPrice>
-              </PriceDetail>
-            </Product>
-
-            <hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=715&q=80" />
-                <Details>
-                  <ProductName>
-                    <b>Prdukti: </b>fdgs
-                  </ProductName>
-                  <ProductId>
-                    <b>ID: </b>545
-                  </ProductId>
-                  <ProductColor />
-                  <ProductSize>
-                    <b>Madhesia: </b>L
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountConteiner>
-                  <Add />
-                  <ProductAmount>3</ProductAmount>
-                  <Remove />
-                </ProductAmountConteiner>
-                <ProductPrice>30.000Leke</ProductPrice>
-              </PriceDetail>
-            </Product>
+            {cart.products.map((product) => (
+              <Product>
+                <ProductDetail>
+                  <Image src={product.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Title </b>
+                      {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID: </b> {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size </b>
+                      {product.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountConteiner>
+                    <Add />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <Remove />
+                  </ProductAmountConteiner>
+                  <ProductPrice>
+                    $ {product.price * product.quantity}
+                  </ProductPrice>
+                </PriceDetail>
+              </Product>
+            ))}
           </Info>
           <Summary>
             <Title>
               <SummaryTitle>Pershkrimi i orderave</SummaryTitle>
               <SummaryItem>
                 <SummaryItemText>SUBTOTAL: </SummaryItemText>
-                <SummaryItemPrice> 50.000LEKE</SummaryItemPrice>
+                <SummaryItemPrice> $ {cart.total}</SummaryItemPrice>
               </SummaryItem>
               <SummaryItem>
                 <SummaryItemText>Transporti: </SummaryItemText>
@@ -220,7 +201,7 @@ const Cart = () => {
               </SummaryItem>
               <SummaryItem type="total">
                 <SummaryItemText>Total: </SummaryItemText>
-                <SummaryItemPrice> 50.000LEKE</SummaryItemPrice>
+                <SummaryItemPrice> $ {cart.total}</SummaryItemPrice>
               </SummaryItem>
               <Button>Checkout Now</Button>
             </Title>
