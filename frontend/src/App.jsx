@@ -15,12 +15,11 @@ import {
 } from "react-router-dom";
 
 import "./app.css";
+import { useSelector } from "react-redux";
 
 const App = () => {
-  const user = true;
-  const navigate = () => {
-    return <Navigate to="/" />;
-  };
+  const user = useSelector((state) => state.user.currentUser);
+
   return (
     <div className="appDiv">
       <Router>
@@ -28,8 +27,14 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route path="/productlist/:category" element={<ProductList />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/register">{user ? navigate : <Register />}</Route>
-          <Route path="/login">{user ? navigate : <Login />}</Route>
+          <Route
+            path="/register"
+            element={user ? <Navigate to="/" /> : <Register />}
+          ></Route>
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/" /> : <Login />}
+          ></Route>
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Pay />} />
           <Route path="/success" element={<Success />} />

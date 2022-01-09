@@ -112,7 +112,7 @@ const Product = () => {
   const [product, setProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState("M");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -154,16 +154,9 @@ const Product = () => {
             </Filter>
             <Filter>
               <FilterTitle>Madhesia</FilterTitle>
-              <FilterSize>
+              <FilterSize onChange={(e) => setSize(e.target.value)}>
                 {product.size?.map((s) => {
-                  return (
-                    <FilterSizeOption
-                      key={s}
-                      onChange={(e) => setSize(e.target.value)}
-                    >
-                      {s}
-                    </FilterSizeOption>
-                  );
+                  return <FilterSizeOption key={s}>{s}</FilterSizeOption>;
                 })}
               </FilterSize>
             </Filter>

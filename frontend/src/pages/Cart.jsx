@@ -6,6 +6,14 @@ import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 
+import { useState, useEffect } from "react";
+import { userRequest } from "../axiosRequest";
+import { useNavigate } from "react-router-dom";
+import StripeCheckout from "react-stripe-checkout";
+
+const KEY =
+  "pk_test_51KFLbMI03jUPNgWR7FPYLyWTF1KquTtaiZP9nJ4i6ljIs1jyj9ZiYSyXAvjJKpXPiDLmOFLAr7qpxdQYV6Ln1Dn900EifmLarC";
+
 const Container = styled.div``;
 const Wrapper = styled.div`
   padding: 20px;
@@ -77,7 +85,7 @@ const ProductColor = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: black;
+  background-color: ${(props) => props.color};
 `;
 const ProductSize = styled.span``;
 const PriceDetail = styled.div`
@@ -136,6 +144,31 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const [stripeToken, setStripeToken] = useState(null);
+  const navigate = useNavigate();
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/checkout/payment", {
+          tokenId: stripeToken.id,
+          amount: 100,
+        });
+
+        console.log(res.data);
+        navigate("/success", {
+          stripeData: res.data,
+          products: cart,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, cart.total, navigate]);
   return (
     <Container>
       <Navbar />
@@ -203,7 +236,17 @@ const Cart = () => {
                 <SummaryItemText>Total: </SummaryItemText>
                 <SummaryItemPrice> $ {cart.total}</SummaryItemPrice>
               </SummaryItem>
-              <Button>Checkout Now</Button>
+              <StripeCheckout
+                name="Sava Clothes"
+                billingAddress
+                shippingAddress
+                description={`Total is  ${cart.total} $`}
+                amount={cart.total * 100}
+                token={onToken}
+                stripeKey={KEY}
+              >
+                <Button>Checkout Now</Button>
+              </StripeCheckout>
             </Title>
           </Summary>
         </Bottom>

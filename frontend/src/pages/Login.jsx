@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { login } from "../redux/apiCalls";
 import { mobile } from "../responsive";
 
 const Conatiner = styled.div`
@@ -44,7 +47,16 @@ const Button = styled.button`
   background-color: teal;
   color: white;
   cursor: pointer;
+  &:disabled {
+    color: gray;
+    cursor: not-allowed;
+  }
 `;
+
+const Error = styled.span`
+  color: red;
+`;
+
 const Link = styled.a`
   margin: 5px 0px;
   font-size: 13px;
@@ -53,14 +65,32 @@ const Link = styled.a`
 `;
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isFetching, error } = useSelector((state) => state.user);
+  const handleLogin = (e) => {
+    e.preventDefault();
+    login(dispatch, { username, password });
+  };
   return (
     <Conatiner>
       <Wrapper>
         <Title>Krijo llogari</Title>
         <Form>
-          <Input placeholder="Username" />
-          <Input placeholder="Fjalkalimi" />
-          <Button>HYR!</Button>
+          <Input
+            placeholder="Username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <Input
+            placeholder="Fjalkalimi"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button onClick={handleLogin} disabled={isFetching}>
+            HYR!
+          </Button>
+          {error && <Error>Something went wrong !</Error>}
           <Link>Nuk mbaj mend fjalekalimin.</Link>
           <Link>Krijo llogari te re</Link>
         </Form>
